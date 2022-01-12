@@ -30,6 +30,7 @@ import { nounVotesForProposalQuery } from '../../wrappers/subgraph';
 import { useQuery } from '@apollo/client';
 import {BigNumber as EthersBN } from "ethers";
 import { StandaloneNounCircular } from "../../components/StandaloneNoun";
+import VoteProgresBar from '../../components/VoteProgressBar';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -51,13 +52,15 @@ const nounIdsToCircleNouns = (nounIds: Array<string> ) => {
   return nounIds.map((nounId:string)=> {
     if(nounId === "-1") {
       return (
-        <Col lg={3}>
-          <div className={classes.grayCircle}/>
+        // <Col lg={3}>
+        <Col>
+            <div className={classes.grayCircle}/>
         </Col>
       );
     }
     return (
-      <Col className={classes.votingNoun} lg={3}>
+      <Col className={classes.votingNoun}>
+      {/* <Col className={classes.votingNoun} lg={3} > */}
         <StandaloneNounCircular nounId = {EthersBN.from(nounId)} />
       </Col>
     );
@@ -412,7 +415,7 @@ const VotePage = ({
                   <span className={`${classes.voteCardHeaderText} ${classes.for}`}>For</span>
                   <span className={classes.voteCardVoteCount}>{proposal?.forCount}</span>
                 </Card.Text>
-                <ProgressBar variant="success" now={forPercentage} />
+                <VoteProgresBar variant="for" percentage={forPercentage} />
                 <Row className={classes.nounProfilePics}>
                   {nounIdsToCircleNouns(forNouns)}
                 </Row>
@@ -426,7 +429,7 @@ const VotePage = ({
                   <span className={`${classes.voteCardHeaderText} ${classes.against}`}>Against</span>
                   <span className={classes.voteCardVoteCount}>{proposal?.againstCount}</span>
                 </Card.Text>
-                <ProgressBar variant="danger" now={againstPercentage} />
+                <VoteProgresBar variant="aginst" percentage={againstPercentage} />
                 <Row className={classes.nounProfilePics}>
                   {nounIdsToCircleNouns(againstNouns)}
                 </Row>
@@ -440,7 +443,7 @@ const VotePage = ({
                   <span className={`${classes.voteCardHeaderText} ${classes.abstain}`}>Abstain</span>
                   <span className={classes.voteCardVoteCount}>{proposal?.abstainCount}</span>
                 </Card.Text>
-                <ProgressBar variant="info" now={abstainPercentage} />
+                <VoteProgresBar variant="abstain" percentage={abstainPercentage} />
                 <Row className={classes.nounProfilePics}>
                   {nounIdsToCircleNouns(abstainNouns)}
                 </Row>
@@ -451,7 +454,7 @@ const VotePage = ({
 
         <Row>
           <Col lg={4}>
-            <Card className={classes.voteCountCard}>
+            <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
                <Row className={classes.voteMetadataRow}>
                  <Col>
@@ -470,7 +473,7 @@ const VotePage = ({
             </Card>
           </Col>
           <Col lg={4}>
-            <Card className={classes.voteCountCard}>
+            <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
               <Row className={classes.voteMetadataRow}>
                  <Col lg={4}>
@@ -485,7 +488,7 @@ const VotePage = ({
             </Card>
           </Col>
           <Col lg={4}>
-            <Card className={classes.voteCountCard}>
+            <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
               <Row className={classes.voteMetadataRow}>
                  <Col>

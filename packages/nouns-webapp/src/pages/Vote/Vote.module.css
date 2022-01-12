@@ -19,6 +19,13 @@
   margin-top: 1rem;
   padding: .5rem;
   border-radius: 12px;
+  background-color: #F4F4F8;
+}
+
+.voteInfoCard {
+  margin-top: 1rem;
+  padding: .5rem;
+  border-radius: 12px;
 }
 
 .proposalId {
@@ -147,6 +154,7 @@
   background-color: #E0E0E7;
   opacity: 50%;
   margin-top: .5rem;
+  margin-bottom: .3rem;
 }
 
 .votingNoun {
@@ -183,6 +191,7 @@
 .submitBtn {
   width: 100%;
   max-width: 8rem;
+  min-width: 8rem;
   height: 3rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
@@ -202,6 +211,7 @@
     background-color: var(--brand-gray-light-text) !important;
     width: 100%;
     max-width: 8rem;
+    min-width: 8rem;
     height: 3rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
