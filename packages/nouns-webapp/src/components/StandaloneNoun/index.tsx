@@ -43,14 +43,21 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
   );
 };
 
-export const StandaloneNounCircular: React.FC<StandaloneNounProps> = (props: StandaloneNounProps) => {
+export const StandaloneNounCircular: React.FC<StandaloneNounProps> = (
+  props: StandaloneNounProps,
+) => {
   const { nounId } = props;
   const seed = useNounSeed(nounId);
   const noun = seed && getNoun(nounId, seed);
 
   return (
     <Link to={'/noun/' + nounId.toString()} className={classes.clickableNoun}>
-      <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} wrapperClassName={nounClasses.small} className={nounClasses.circular} />
+      <Noun
+        imgPath={noun ? noun.image : ''}
+        alt={noun ? noun.description : 'Noun'}
+        wrapperClassName={nounClasses.small}
+        className={nounClasses.circular}
+      />
     </Link>
   );
 };

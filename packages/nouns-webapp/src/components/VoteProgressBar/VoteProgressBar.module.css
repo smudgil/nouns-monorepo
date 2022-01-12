@@ -1,9 +1,9 @@
 .wrapper {
-    border-radius: 6px;
-    height: 1rem;
+  border-radius: 6px;
+  height: 1rem;
 }
 
 .progressBar {
-    height: 100%;
-    border-radius: 6px;
+  height: 100%;
+  border-radius: 6px;
 }

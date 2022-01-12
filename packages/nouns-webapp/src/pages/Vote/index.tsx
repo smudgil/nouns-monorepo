@@ -1,4 +1,4 @@
-import { Row, Col, Alert, Button, Card, ProgressBar, Spinner } from 'react-bootstrap';
+import { Row, Col, Alert, Button, Card, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
@@ -28,45 +28,26 @@ import { utils } from 'ethers';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { nounVotesForProposalQuery } from '../../wrappers/subgraph';
 import { useQuery } from '@apollo/client';
-import {BigNumber as EthersBN } from "ethers";
-import { StandaloneNounCircular } from "../../components/StandaloneNoun";
 import VoteProgresBar from '../../components/VoteProgressBar';
+import proposalStatusClasses from '../../components/ProposalStatus/ProposalStatus.module.css';
+import NounImageVoteTable from '../../components/NounImageVoteTable';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
 
 const AVERAGE_BLOCK_TIME_IN_SECS = 13;
-const NOUNS_PER_VOTE_CARD = 16;
 
 // Helper function to response from graph into flat list of nounIds that voted
 // supportDetailed for the given prop
-const getNounVotes = (data:any, supportDetailed: number) => {
-  return data.proposals[0].votes.filter((vote:any) => vote.supportDetailed === supportDetailed).map(
-    (vote:any) => vote.nouns
-  ).flat(1).map((noun:any) => noun.id);
+const getNounVotes = (data: any, supportDetailed: number) => {
+  return data.proposals[0].votes
+    .filter((vote: any) => vote.supportDetailed === supportDetailed)
+    .map((vote: any) => vote.nouns)
+    .flat(1)
+    .map((noun: any) => noun.id);
 };
 
-const nounIdsToCircleNouns = (nounIds: Array<string> ) => {
-  nounIds = nounIds.concat(Array(NOUNS_PER_VOTE_CARD).fill("-1")).slice(0,NOUNS_PER_VOTE_CARD)
-  return nounIds.map((nounId:string)=> {
-    if(nounId === "-1") {
-      return (
-        // <Col lg={3}>
-        <Col>
-            <div className={classes.grayCircle}/>
-        </Col>
-      );
-    }
-    return (
-      <Col className={classes.votingNoun}>
-      {/* <Col className={classes.votingNoun} lg={3} > */}
-        <StandaloneNounCircular nounId = {EthersBN.from(nounId)} />
-      </Col>
-    );
-  }
-  );
-};
 
 const VotePage = ({
   match: {
@@ -167,7 +148,7 @@ const VotePage = ({
     return false;
   };
 
-  const { forCount = 0, againstCount = 0, quorumVotes = 0 } = proposal || {};
+  // const { forCount = 0, againstCount = 0, quorumVotes = 0 } = proposal || {};
 
   const moveStateButtonAction = hasSucceeded ? 'Queue' : 'Execute';
   const moveStateAction = (() => {
@@ -248,11 +229,13 @@ const VotePage = ({
 
   const backButtonClickHandler = () => {
     // eslint-disable-next-line no-restricted-globals
-    location.href = "/vote"
-  }
+    location.href = '/vote';
+  };
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
-  const {loading, error, data} = useQuery(nounVotesForProposalQuery(proposal && proposal.id ? proposal?.id : "0"));
+  const { loading, error, data } = useQuery(
+    nounVotesForProposalQuery(proposal && proposal.id ? proposal?.id : '0'),
+  );
   if (!proposal || loading || !data || data.proposals.length === 0) {
     return (
       <div className={classes.spinner}>
@@ -265,7 +248,6 @@ const VotePage = ({
     return <>Failed to fetch</>;
   }
 
-
   const forNouns = getNounVotes(data, 1);
   const againstNouns = getNounVotes(data, 0);
   const abstainNouns = getNounVotes(data, 2);
@@ -274,7 +256,7 @@ const VotePage = ({
     if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
       return 'Ends';
     } else if (endDate?.isBefore(now)) {
-      return 'Ended'
+      return 'Ended';
     } else {
       return 'Starts';
     }
@@ -282,9 +264,9 @@ const VotePage = ({
 
   const startOrEndTimeTime = () => {
     if (!startDate?.isBefore(now)) {
-      return startDate
+      return startDate;
     } else {
-      return endDate
+      return endDate;
     }
   };
 
@@ -305,35 +287,38 @@ const VotePage = ({
       <Col lg={{ span: 10, offset: 1 }} className={classes.proposal}>
         <div className="d-flex justify-content-between align-items-center">
           <div className="d-flex justify-content-start align-items-start">
-                <button
-                          className={classes.leftArrowCool}
-                          onClick={backButtonClickHandler}
-                      >
-                      ←
-                </button>
-                <div className={classes.headerRow}>
-                  <span>Proposal {proposal.id}</span>
-                  <h1>
-                    {proposal.title} <span style={{ verticalAlign: 'top'}}><ProposalStatus status={proposal?.status}></ProposalStatus></span>
-                  </h1>
-                </div>
+            <button className={classes.leftArrowCool} onClick={backButtonClickHandler}>
+              ←
+            </button>
+            <div className={classes.headerRow}>
+              <span>Proposal {proposal.id}</span>
+              <h1>
+                {proposal.title}{' '}
+                <span style={{ verticalAlign: 'top' }}>
+                  <ProposalStatus
+                    status={proposal?.status}
+                    className={proposalStatusClasses.votePageProposalStatus}
+                  ></ProposalStatus>
+                </span>
+              </h1>
+            </div>
           </div>
           <div className="d-flex justify-content-end align-items-end">
-                {isWalletConnected ? (<></>) : (
-                  <div className={classes.connectWalletText}>
-                    Connect a wallet to vote.
-                  </div>
-                )}
-                {
-                  isActiveForVoting && (
-                      <Button
-                                className={isWalletConnected ?  classes.submitBtn : classes.submitBtnDisabled}
-                                onClick={backButtonClickHandler}
-                      >
-                              Submit vote
-                      </Button>
-                  )
-                }
+            {isActiveForVoting && (
+              <>
+              {isWalletConnected ? (
+                <></>
+              ) : (
+                <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
+              )}
+              <Button
+                className={isWalletConnected ? classes.submitBtn : classes.submitBtnDisabled}
+                onClick={backButtonClickHandler}
+              >
+                Submit vote
+              </Button>
+              </>
+            )}
           </div>
         </div>
         {proposal && proposalActive && (
@@ -416,8 +401,15 @@ const VotePage = ({
                   <span className={classes.voteCardVoteCount}>{proposal?.forCount}</span>
                 </Card.Text>
                 <VoteProgresBar variant="for" percentage={forPercentage} />
-                <Row className={classes.nounProfilePics}>
-                  {nounIdsToCircleNouns(forNouns)}
+                <Row
+                  className={classes.nounProfilePics}
+                  style={{
+                    paddingLeft: '.5rem',
+                    paddingRight: '.2rem',
+                  }}
+                >
+                  {/* {nounIdsToCircleNouns(forNouns)} */}
+                  <NounImageVoteTable nounIds={forNouns} />
                 </Row>
               </Card.Body>
             </Card>
@@ -426,12 +418,21 @@ const VotePage = ({
             <Card className={classes.voteCountCard}>
               <Card.Body className="p-2">
                 <Card.Text className="py-2 m-0">
-                  <span className={`${classes.voteCardHeaderText} ${classes.against}`}>Against</span>
+                  <span className={`${classes.voteCardHeaderText} ${classes.against}`}>
+                    Against
+                  </span>
                   <span className={classes.voteCardVoteCount}>{proposal?.againstCount}</span>
                 </Card.Text>
                 <VoteProgresBar variant="aginst" percentage={againstPercentage} />
-                <Row className={classes.nounProfilePics}>
-                  {nounIdsToCircleNouns(againstNouns)}
+                <Row
+                  className={classes.nounProfilePics}
+                  style={{
+                    paddingLeft: '.5rem',
+                    paddingRight: '.2rem',
+                  }}
+                >
+                  {/* {nounIdsToCircleNouns(againstNouns)} */}
+                  <NounImageVoteTable nounIds={againstNouns} />
                 </Row>
               </Card.Body>
             </Card>
@@ -440,12 +441,21 @@ const VotePage = ({
             <Card className={classes.voteCountCard}>
               <Card.Body className="p-2">
                 <Card.Text className="py-2 m-0">
-                  <span className={`${classes.voteCardHeaderText} ${classes.abstain}`}>Abstain</span>
+                  <span className={`${classes.voteCardHeaderText} ${classes.abstain}`}>
+                    Abstain
+                  </span>
                   <span className={classes.voteCardVoteCount}>{proposal?.abstainCount}</span>
                 </Card.Text>
                 <VoteProgresBar variant="abstain" percentage={abstainPercentage} />
-                <Row className={classes.nounProfilePics}>
-                  {nounIdsToCircleNouns(abstainNouns)}
+                <Row
+                  className={classes.nounProfilePics}
+                  style={{
+                    paddingLeft: '.5rem',
+                    paddingRight: '.2rem',
+                  }}
+                >
+                  {/* {nounIdsToCircleNouns(abstainNouns)} */}
+                  <NounImageVoteTable nounIds={abstainNouns} />
                 </Row>
               </Card.Body>
             </Card>
@@ -456,54 +466,53 @@ const VotePage = ({
           <Col lg={4}>
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
-               <Row className={classes.voteMetadataRow}>
-                 <Col>
-                  <h1>Threshold</h1>
-                </Col>
-                <Col>
-                  <span>Differential</span>
-                  <h3>{proposal.forCount - proposal.againstCount} votes</h3>
-                </Col>
-                <Col>
-                  <span>Quorum</span>
-                  <h3>{proposal.quorumVotes} votes</h3>
-                </Col>
-               </Row> 
+                <Row className={classes.voteMetadataRow}>
+                  <Col style={{ marginTop: '.1rem' }}>
+                    <h1>Threshold</h1>
+                  </Col>
+                  <Col>
+                    <span>Differential</span>
+                    <h3>{proposal.forCount - proposal.againstCount} votes</h3>
+                  </Col>
+                  <Col>
+                    <span>Quorum</span>
+                    <h3>{proposal.quorumVotes} votes</h3>
+                  </Col>
+                </Row>
               </Card.Body>
             </Card>
           </Col>
           <Col lg={4}>
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
-              <Row className={classes.voteMetadataRow}>
-                 <Col lg={4}>
-                  <h1>{startOrEndTimeCopy()}</h1>
-                </Col>
-                <Col>
-                  <span>{startOrEndTimeTime() && startOrEndTimeTime()?.format('h:mm A z')}</span>
-                  <h3>{startOrEndTimeTime() && startOrEndTimeTime()?.format('MMMM D, YYYY')}</h3>
-                </Col>
-               </Row> 
+                <Row className={classes.voteMetadataRow}>
+                  <Col style={{ marginTop: '.1rem' }}>
+                    <h1>{startOrEndTimeCopy()}</h1>
+                  </Col>
+                  <Col style={{ minWidth: '11rem' }}>
+                    <span>{startOrEndTimeTime() && startOrEndTimeTime()?.format('h:mm A z')}</span>
+                    <h3>{startOrEndTimeTime() && startOrEndTimeTime()?.format('MMMM D, YYYY')}</h3>
+                  </Col>
+                </Row>
               </Card.Body>
             </Card>
           </Col>
           <Col lg={4}>
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
-              <Row className={classes.voteMetadataRow}>
-                 <Col>
-                  <h1>Snapshot</h1>
-                </Col>
-                <Col>
-                  <span>Taken at block</span>
-                  <h3>{proposal.createdBlock}</h3>
-                </Col>
-               </Row> 
+                <Row className={classes.voteMetadataRow}>
+                  <Col style={{ marginTop: '.1rem' }}>
+                    <h1>Snapshot</h1>
+                  </Col>
+                  <Col>
+                    <span>Taken at block</span>
+                    <h3>{proposal.createdBlock}</h3>
+                  </Col>
+                </Row>
               </Card.Body>
             </Card>
           </Col>
         </Row>
-
 
         <Row>
           <Col className={classes.section}>

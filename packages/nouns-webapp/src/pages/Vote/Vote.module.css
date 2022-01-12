@@ -17,14 +17,14 @@
 
 .voteCountCard {
   margin-top: 1rem;
-  padding: .5rem;
+  padding: 0.5rem;
   border-radius: 12px;
-  background-color: #F4F4F8;
+  background-color: #f4f4f8;
 }
 
 .voteInfoCard {
   margin-top: 1rem;
-  padding: .5rem;
+  padding: 0.5rem;
   border-radius: 12px;
 }
 
@@ -151,18 +151,18 @@
   height: 42px;
   width: 42px;
   border-radius: 50%;
-  background-color: #E0E0E7;
+  background-color: #e0e0e7;
   opacity: 50%;
-  margin-top: .5rem;
-  margin-bottom: .3rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.3rem;
 }
 
 .votingNoun {
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
 .nounProfilePics {
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
 .voteMetadataRow h1 {
@@ -172,20 +172,21 @@
 }
 
 .voteMetadataRow span {
- font-size: 14px;
- font-family: 'PT Root UI';
- color: var(--brand-gray-light-text);
+  font-size: 14px;
+  font-family: 'PT Root UI';
+  color: var(--brand-gray-light-text);
 }
 
 .voteMetadataRow h3 {
- font-size: 18px;
- font-family: 'PT Root UI Bold';
+  font-size: 18px;
+  font-family: 'PT Root UI Bold';
 }
 
 .connectWalletText {
- color: var(--brand-gray-light-text);
- font-family: 'PT Root UI Bold';
- font-size: 16px;
+  color: var(--brand-gray-light-text);
+  font-family: 'PT Root UI Bold';
+  font-size: 16px;
+  min-width: 12rem;
 }
 
 .submitBtn {
@@ -208,18 +209,18 @@
   background-color: var(--brand-dark-red) !important;
 }
 .submitBtnDisabled {
-    background-color: var(--brand-gray-light-text) !important;
-    width: 100%;
-    max-width: 8rem;
-    min-width: 8rem;
-    height: 3rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    border-radius: 12px;
-    border: var(--brand-dark-red);
-    opacity: 50%;
+  background-color: var(--brand-gray-light-text) !important;
+  width: 100%;
+  max-width: 8rem;
+  min-width: 8rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  border: var(--brand-dark-red);
+  opacity: 50%;
 }
 
 .submitBtnDisabled:hover {
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
