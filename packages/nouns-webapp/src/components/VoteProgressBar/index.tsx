@@ -3,7 +3,7 @@ import classes from './VoteProgressBar.module.css';
 export enum ProgressBarVariant {
   FOR,
   AGINST,
-  ABSTAIN
+  ABSTAIN,
 }
 
 const VoteProgresBar: React.FC<{

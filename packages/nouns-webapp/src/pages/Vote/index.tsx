@@ -38,7 +38,7 @@ dayjs.extend(advanced);
 
 const AVERAGE_BLOCK_TIME_IN_SECS = 13;
 
-// Helper function to response from graph into flat list of nounIds that voted
+// Helper function to transform response from graph into flat list of nounIds that voted
 // supportDetailed for the given prop
 const getNounVotes = (data: any, supportDetailed: number) => {
   return data.proposals[0].votes
@@ -47,7 +47,6 @@ const getNounVotes = (data: any, supportDetailed: number) => {
     .flat(1)
     .map((noun: any) => noun.id);
 };
-
 
 const VotePage = ({
   match: {
@@ -148,8 +147,6 @@ const VotePage = ({
     return false;
   };
 
-  // const { forCount = 0, againstCount = 0, quorumVotes = 0 } = proposal || {};
-
   const moveStateButtonAction = hasSucceeded ? 'Queue' : 'Execute';
   const moveStateAction = (() => {
     if (hasSucceeded) {
@@ -231,6 +228,7 @@ const VotePage = ({
     // eslint-disable-next-line no-restricted-globals
     location.href = '/vote';
   };
+
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const { loading, error, data } = useQuery(
@@ -294,11 +292,11 @@ const VotePage = ({
               <span>Proposal {proposal.id}</span>
               <h1>
                 {proposal.title}{' '}
-                <span style={{ verticalAlign: 'top' }}>
+                <span className={classes.proposalStatus}>
                   <ProposalStatus
                     status={proposal?.status}
                     className={proposalStatusClasses.votePageProposalStatus}
-                  ></ProposalStatus>
+                  />
                 </span>
               </h1>
             </div>
@@ -306,17 +304,17 @@ const VotePage = ({
           <div className="d-flex justify-content-end align-items-end">
             {isActiveForVoting && (
               <>
-              {isWalletConnected ? (
-                <></>
-              ) : (
-                <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
-              )}
-              <Button
-                className={isWalletConnected ? classes.submitBtn : classes.submitBtnDisabled}
-                onClick={backButtonClickHandler}
-              >
-                Submit vote
-              </Button>
+                {isWalletConnected ? (
+                  <></>
+                ) : (
+                  <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
+                )}
+                <Button
+                  className={isWalletConnected ? classes.submitBtn : classes.submitBtnDisabled}
+                  onClick={backButtonClickHandler}
+                >
+                  Submit vote
+                </Button>
               </>
             )}
           </div>
@@ -401,14 +399,7 @@ const VotePage = ({
                   <span className={classes.voteCardVoteCount}>{proposal?.forCount}</span>
                 </Card.Text>
                 <VoteProgresBar variant={ProgressBarVariant.FOR} percentage={forPercentage} />
-                <Row
-                  className={classes.nounProfilePics}
-                  style={{
-                    paddingLeft: '.5rem',
-                    paddingRight: '.2rem',
-                  }}
-                >
-                  {/* {nounIdsToCircleNouns(forNouns)} */}
+                <Row className={classes.nounProfilePics}>
                   <NounImageVoteTable nounIds={forNouns} />
                 </Row>
               </Card.Body>
@@ -423,15 +414,11 @@ const VotePage = ({
                   </span>
                   <span className={classes.voteCardVoteCount}>{proposal?.againstCount}</span>
                 </Card.Text>
-                <VoteProgresBar variant={ProgressBarVariant.AGINST} percentage={againstPercentage} />
-                <Row
-                  className={classes.nounProfilePics}
-                  style={{
-                    paddingLeft: '.5rem',
-                    paddingRight: '.2rem',
-                  }}
-                >
-                  {/* {nounIdsToCircleNouns(againstNouns)} */}
+                <VoteProgresBar
+                  variant={ProgressBarVariant.AGINST}
+                  percentage={againstPercentage}
+                />
+                <Row className={classes.nounProfilePics}>
                   <NounImageVoteTable nounIds={againstNouns} />
                 </Row>
               </Card.Body>
@@ -446,15 +433,11 @@ const VotePage = ({
                   </span>
                   <span className={classes.voteCardVoteCount}>{proposal?.abstainCount}</span>
                 </Card.Text>
-                <VoteProgresBar variant={ProgressBarVariant.ABSTAIN} percentage={abstainPercentage} />
-                <Row
-                  className={classes.nounProfilePics}
-                  style={{
-                    paddingLeft: '.5rem',
-                    paddingRight: '.2rem',
-                  }}
-                >
-                  {/* {nounIdsToCircleNouns(abstainNouns)} */}
+                <VoteProgresBar
+                  variant={ProgressBarVariant.ABSTAIN}
+                  percentage={abstainPercentage}
+                />
+                <Row className={classes.nounProfilePics}>
                   <NounImageVoteTable nounIds={abstainNouns} />
                 </Row>
               </Card.Body>
@@ -467,7 +450,7 @@ const VotePage = ({
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
                 <Row className={classes.voteMetadataRow}>
-                  <Col style={{ marginTop: '.1rem' }}>
+                  <Col className={classes.voteMetadataRowTitle}>
                     <h1>Threshold</h1>
                   </Col>
                   <Col>
@@ -486,10 +469,10 @@ const VotePage = ({
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
                 <Row className={classes.voteMetadataRow}>
-                  <Col style={{ marginTop: '.1rem' }}>
+                  <Col className={classes.voteMetadataRowTitle}>
                     <h1>{startOrEndTimeCopy()}</h1>
                   </Col>
-                  <Col style={{ minWidth: '11rem' }}>
+                  <Col className={classes.voteMetadataTime}>
                     <span>{startOrEndTimeTime() && startOrEndTimeTime()?.format('h:mm A z')}</span>
                     <h3>{startOrEndTimeTime() && startOrEndTimeTime()?.format('MMMM D, YYYY')}</h3>
                   </Col>
@@ -501,7 +484,7 @@ const VotePage = ({
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
                 <Row className={classes.voteMetadataRow}>
-                  <Col style={{ marginTop: '.1rem' }}>
+                  <Col className={classes.voteMetadataRowTitle}>
                     <h1>Snapshot</h1>
                   </Col>
                   <Col>

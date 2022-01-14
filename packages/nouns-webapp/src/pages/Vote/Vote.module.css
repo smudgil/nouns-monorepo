@@ -163,6 +163,8 @@
 
 .nounProfilePics {
   margin-top: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.2rem;
 }
 
 .voteMetadataRow h1 {
@@ -223,4 +225,16 @@
 
 .submitBtnDisabled:hover {
   cursor: not-allowed;
+}
+
+.proposalStatus {
+  vertical-align: top;
+}
+
+.voteMetadataRowTitle {
+  margin-top: 0.1rem;
+}
+
+.voteMetadataTime {
+  min-width: 11rem;
 }
