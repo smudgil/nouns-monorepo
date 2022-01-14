@@ -28,7 +28,7 @@ import { utils } from 'ethers';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { nounVotesForProposalQuery } from '../../wrappers/subgraph';
 import { useQuery } from '@apollo/client';
-import VoteProgresBar from '../../components/VoteProgressBar';
+import VoteProgresBar, { ProgressBarVariant } from '../../components/VoteProgressBar';
 import proposalStatusClasses from '../../components/ProposalStatus/ProposalStatus.module.css';
 import NounImageVoteTable from '../../components/NounImageVoteTable';
 
@@ -400,7 +400,7 @@ const VotePage = ({
                   <span className={`${classes.voteCardHeaderText} ${classes.for}`}>For</span>
                   <span className={classes.voteCardVoteCount}>{proposal?.forCount}</span>
                 </Card.Text>
-                <VoteProgresBar variant="for" percentage={forPercentage} />
+                <VoteProgresBar variant={ProgressBarVariant.FOR} percentage={forPercentage} />
                 <Row
                   className={classes.nounProfilePics}
                   style={{
@@ -423,7 +423,7 @@ const VotePage = ({
                   </span>
                   <span className={classes.voteCardVoteCount}>{proposal?.againstCount}</span>
                 </Card.Text>
-                <VoteProgresBar variant="aginst" percentage={againstPercentage} />
+                <VoteProgresBar variant={ProgressBarVariant.AGINST} percentage={againstPercentage} />
                 <Row
                   className={classes.nounProfilePics}
                   style={{
@@ -446,7 +446,7 @@ const VotePage = ({
                   </span>
                   <span className={classes.voteCardVoteCount}>{proposal?.abstainCount}</span>
                 </Card.Text>
-                <VoteProgresBar variant="abstain" percentage={abstainPercentage} />
+                <VoteProgresBar variant={ProgressBarVariant.ABSTAIN} percentage={abstainPercentage} />
                 <Row
                   className={classes.nounProfilePics}
                   style={{

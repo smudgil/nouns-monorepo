@@ -10,17 +10,15 @@ const NOUNS_PER_VOTE_CARD = 15;
 const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
   const { nounIds } = props;
   const paddedNounIds = nounIds
-    .concat(Array(NOUNS_PER_VOTE_CARD).fill('-1'))
-    .slice(0, NOUNS_PER_VOTE_CARD)
     .map((nounId: string) => {
-      if (nounId === '-1') {
-        return <div className={classes.grayCircle} />;
-      }
       return <StandaloneNounCircular nounId={EthersBN.from(nounId)} />;
-    });
+    }).concat(Array(NOUNS_PER_VOTE_CARD).fill(
+      <div className={classes.grayCircle} />
+    ))
+    .slice(0, NOUNS_PER_VOTE_CARD);
 
   return (
-    <table style={{ marginTop: '.5rem' }}>
+    <table className={classes.wrapper}>
       <tr>
         <td>{paddedNounIds[0]}</td>
         <td>{paddedNounIds[1]}</td>
